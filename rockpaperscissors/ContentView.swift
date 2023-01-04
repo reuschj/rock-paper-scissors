@@ -7,15 +7,47 @@
 
 import SwiftUI
 
+private struct OptionsLink: View {
+    var body: some View {
+        NavigationLink(
+            destination: OptionsPanel()
+        ) {
+            Text("🎛️ Options")
+        }
+    }
+}
+
+struct IOSMainView: View {
+    var body: some View {
+        #if os(iOS)
+        NavigationStack {
+                MainView()
+                    .navigationBarItems(
+                        trailing: OptionsLink()
+                    )
+                }
+                .navigationViewStyle(StackNavigationViewStyle())
+        #endif
+    }
+}
+
+struct MacMainView: View {
+    var body: some View {
+        NavigationStack {
+            MainView()
+        }
+    }
+}
+
+
+
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+        #if os(iOS)
+            IOSMainView()
+        #else
+            MacMainView()
+        #endif
     }
 }
 
