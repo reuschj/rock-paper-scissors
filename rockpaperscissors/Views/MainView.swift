@@ -16,6 +16,7 @@ struct MainView: View {
     @State var resultStringSub: String? = nil
     @State var showInstructions: Bool = true
     @State var animating: Bool = false
+    @State private var id: UUID = .init()
     
     @ObservedObject var options: Options = .shared
     
@@ -35,6 +36,7 @@ struct MainView: View {
     }
     
     private func makeChoice(_ choice: RockPaperScissors) {
+        self.id = .init()
         self.showInstructions = false
         self.choice = choice
         let opponent = getComputerPlay(
@@ -49,19 +51,29 @@ struct MainView: View {
         case .win:
             self.resultStringHead = "You won! 🎉🥳🍾"
         case .tie:
-            self.resultStringHead = "Call it a draw 🤷"
+            self.resultStringHead = "Call it a draw \(shrugEmoji)"
         case .loss:
             self.resultStringHead = "You lost! 😢😭"
         }
     }
     
     private func reset(showInstructions: Bool = true, choice: RockPaperScissors? = nil) {
+        self.id = .init()
         self.showInstructions = showInstructions
         self.choice = choice
         self.opponent = nil
         self.result = nil
         self.resultStringHead = nil
         self.resultStringSub = nil
+    }
+    
+    private func animate(for duration: Duration, sideEffect: (() -> Void)? = nil) {
+        self.animating = true
+        Task {
+            try await Task.sleep(for: duration)
+            sideEffect?()
+            self.animating = false
+        }
     }
     
     private func button(_ type: RockPaperScissors, size: CGFloat) -> some View {
@@ -71,17 +83,11 @@ struct MainView: View {
                 size: size,
                 color: choice == type ? .yellow : .teal
             )  {
-                self.animating = true
-//                makeChoice(type)
-                reset(showInstructions: false, choice: type)
-                Task {
-                    try await Task.sleep(for: .seconds(0.4))
-                    makeChoice(type)
-                    self.animating = false
-                }
+                makeChoice(type)
+                animate(for: .seconds(0.4))
             }
         }
-        .scaleEffect(choice == type ? (animating ? 1.1 : 1) : (animating ? 0.9 : 1))
+        .scaleEffect(choice == type ? (animating ? 1.15 : 1) : (animating ? 0.85 : 1))
         .animation(.default, value: animating)
     }
     
@@ -89,20 +95,25 @@ struct MainView: View {
         RPSTile(
             type: type,
             size: size,
-            color: didWin ? (result == .win ? .green : .red) : nil
+            color: didWin ? (result == .win ? .green : .red) : nil,
+            animateDuration: .seconds(0.5)
         )
-        .padding(.top, base)
+        .padding(.bottom, base)
     }
     
-    private func resultBlock(_ type: RockPaperScissors, label: String, size: CGFloat, didWin: Bool) -> some View {
+    private func resultBlock(_ type: RockPaperScissors, label: String, size: CGFloat, didWin: Bool, from edge: Edge = .leading) -> some View {
         VStack {
-            Text(label)
-                .font(.headline)
             tile(
                 type,
                 size: size,
                 didWin: didWin
             )
+                .id(id)
+                .transition(.push(from: edge))
+                .animation(.easeInOut(duration: 0.45), value: id)
+            Text(label)
+                .font(.headline)
+                .multilineTextAlignment(.center)
         }
     }
     
@@ -125,14 +136,40 @@ struct MainView: View {
             .padding(.bottom, spacing * 2)
     }
     
+    private var youName: String { options.name ?? "You" }
+    
+    private var youEmoji: Character {
+        switch options.gender {
+        case .male:
+            return "🧍‍♂️"
+        case .female:
+            return "🧍‍♀️"
+        default:
+            return "🧍"
+        }
+    }
+    
+    private var youLabel: String { "\(youName)\(youEmoji)" }
+    
+    private var shrugEmoji: Character {
+        switch options.gender {
+        case .male:
+            return "🤷‍♂️"
+        case .female:
+            return "🤷‍♀️"
+        default:
+            return "🤷"
+        }
+    }
+    
     var body: some View {
         VStack {
-            headline
             GeometryReader { geo in
-                
                 VStack(alignment: .center) {
-                    buttonRack(within: geo)
-                    
+                    VStack {
+                        headline
+                        buttonRack(within: geo)
+                    }
                     VStack {
                         if !showInstructions, let choice = choice, let opponent = opponent {
                             let (resultSize, totalResultSize, resultSpacing) = getSize(from: geo, items: 2)
@@ -151,18 +188,24 @@ struct MainView: View {
                                     }
                                 }
                                 .padding(.bottom)
+                                .id(animating)
+                                .opacity(animating ? 0 : 1)
+                                .animation(.easeInOut, value: animating)
+                                
                                 HStack(alignment: .center, spacing: resultSpacing) {
                                     resultBlock(
                                         choice,
-                                        label: "You🧍",
+                                        label: youLabel,
                                         size: resultSize,
-                                        didWin: result == .win
+                                        didWin: result == .win,
+                                        from: .top
                                     )
                                     resultBlock(
                                         opponent,
-                                        label: getComputerDescription(),
+                                        label: getComputerDescription(options: options),
                                         size: resultSize,
-                                        didWin: result == .loss
+                                        didWin: result == .loss,
+                                        from: .trailing
                                     )
                                 }
                                 .frame(width: totalResultSize, alignment: .center)
@@ -174,8 +217,6 @@ struct MainView: View {
                                 }
                                 Spacer()
                             }
-                            .transition(.slide)
-                            .animation(.easeInOut)
                         } else if showInstructions {
                             VStack {
                                 Spacer()
@@ -185,10 +226,11 @@ struct MainView: View {
                                     .multilineTextAlignment(.center)
                                 Spacer()
                             }
-                            .transition(.slide)
-                            .animation(.easeInOut)
                         }
                     }
+                    .id(showInstructions)
+                    .transition(.move(edge: .bottom))
+                    .animation(.easeInOut, value: showInstructions)
                 }
                 .frame(width: geo.size.width)
             }

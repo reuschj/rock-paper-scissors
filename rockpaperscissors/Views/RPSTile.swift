@@ -16,11 +16,22 @@ struct RPSTile: View {
     var strokeOpacity: CGFloat = 0.5
     var strokeWidth: CGFloat = 1
     var showLabel: Bool = false
+    var animateDuration: Duration? = nil
+    
+    @State private var animating: Bool = true
 
     private let multiplier: CGFloat = 16
     private var _size: CGFloat { min(size, maxSize) }
     private var base: CGFloat { _size / multiplier }
     private var cornerRadius: CGFloat { base }
+    
+    private func animate() {
+        animating = true
+        Task {
+            try await Task.sleep(for: animateDuration ?? .seconds(1))
+            animating = false
+        }
+    }
 
     var body: some View {
         VStack {
@@ -39,7 +50,8 @@ struct RPSTile: View {
             .padding(base)
             .background(
                 ( color ?? .clear )
-                    .opacity(opacity)
+                    .opacity(animateDuration != nil && animating ? 0 : opacity)
+                    .animation(.easeInOut, value: animating)
             )
             .cornerRadius(cornerRadius)
             .overlay(
@@ -47,9 +59,11 @@ struct RPSTile: View {
                     .stroke(color ?? .clear,
                         lineWidth: strokeWidth
                     )
-                    .opacity(strokeOpacity)
+                    .opacity(animateDuration != nil && animating ? 0 : strokeOpacity)
+                    .animation(.easeInOut, value: animating)
             )
             .frame(minWidth: _size, maxWidth: _size, minHeight: _size, maxHeight: _size)
+            .onAppear { animate() }
     }
 }
 
@@ -63,7 +77,8 @@ struct RPSTile_Previews: PreviewProvider {
                 opacity: 0.5,
                 strokeOpacity: 0.2,
                 strokeWidth: 1,
-                showLabel: false
+                showLabel: false,
+                animateDuration: .seconds(0.5)
             )
                 .padding(24)
         }

@@ -18,10 +18,26 @@ fileprivate struct OptionsPanelBase: View {
         set: { options.computerPlayType = $0 }
     )
     
+    private var name = Binding<String>(
+        get: { options.name ?? "" },
+        set: {
+            guard $0.count > 0 else {
+                options.name = nil
+                return
+            }
+            options.name = $0
+        }
+    )
+    
+    private var gender = Binding<Gender?>(
+        get: { options.gender },
+        set: { options.gender = $0 }
+    )
+    
     var body: some View {
         Form {
             Section(
-                header: Text("How does \(getComputerDescription(withoutEmoji: true)) play?")
+                header: Text("🎮 How does \(getComputerDescription(withoutEmoji: true, options: options)) play?")
             ) {
                 Picker("Play type 👉",
                        selection: computerPlayType,
@@ -30,6 +46,27 @@ fileprivate struct OptionsPanelBase: View {
                                 Text($0.type.description).tag($0.type)
                             }
                     
+                }).pickerStyle(DefaultPickerStyle())
+            }
+            // ---------- /
+            Section(
+                header: Text("🧑 About you...")
+            ) {
+                HStack {
+                    Text("🗣️ Your name?")
+                    TextField(
+                        "test",
+                        text: name,
+                        prompt: Text("How to call you?")
+                    ).multilineTextAlignment(.trailing)
+                }
+                Picker("🚻 Your gender?",
+                       selection: gender,
+                       content: {
+                            ForEach(GenderHolder.all) {
+                                Text($0.gender?.description ?? "🚫 Unspecified").tag($0.gender)
+                            }
+
                 }).pickerStyle(DefaultPickerStyle())
             }
         }

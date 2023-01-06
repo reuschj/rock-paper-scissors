@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-func getComputerDescription(withoutEmoji: Bool = false) -> String {
+func getComputerDescription(withoutEmoji: Bool = false, options: Options? = nil) -> String {
     var deviceName = "computer"
     var emoji = withoutEmoji ? "" : "🖥️"
+    var your = options?.name != nil ? "\(options?.name ?? "")'s" : "Your"
     #if os(iOS)
         deviceName = UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
         if !withoutEmoji {
@@ -18,5 +19,5 @@ func getComputerDescription(withoutEmoji: Bool = false) -> String {
     #else
         deviceName = "Mac"
     #endif
-    return "\(emoji) Your \(deviceName)"
+    return "\(emoji) \(your) \(deviceName)"
 }

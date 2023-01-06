@@ -10,6 +10,8 @@ import Combine
 
 class Options: ObservableObject {
     @Published var computerPlayType: ComputerPlayType = .random
+    @Published var name: String?
+    @Published var gender: Gender?
     
     static var shared: Options = .init()
 }
