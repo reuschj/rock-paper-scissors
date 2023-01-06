@@ -220,7 +220,7 @@ struct MainView: View {
                         } else if showInstructions {
                             VStack {
                                 Spacer()
-                                Text("👆\nPress a button above to get a result!\n😜")
+                                Text("👆\nPress a button above to play!\n😜")
                                     .font(.largeTitle)
                                     .foregroundColor(.gray)
                                     .multilineTextAlignment(.center)

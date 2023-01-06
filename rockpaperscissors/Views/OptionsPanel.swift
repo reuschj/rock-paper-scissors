@@ -25,7 +25,7 @@ fileprivate struct OptionsPanelBase: View {
                 options.name = nil
                 return
             }
-            options.name = $0
+            options.name = $0.trimEnd()
         }
     )
     
