@@ -26,13 +26,13 @@ enum ComputerPlayType: CustomStringConvertible {
     var description: String {
         switch self {
         case .random:
-            return "Normal (random)"
+            return "Random"
         case .computerAlwaysWins:
-            return "Computer always wins (it cheats)"
+            return "Computer always wins"
         case .computerAlwaysLoses:
-            return "Computer always loses (you cheat)"
+            return "Computer always loses"
         case .computerAlwaysMatches:
-            return "Computer always matches (is there an echo?)"
+            return "Computer always matches"
         }
     }
 }

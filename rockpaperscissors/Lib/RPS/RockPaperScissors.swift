@@ -111,8 +111,12 @@ extension RockPaperScissors: Comparable {
             }
         }
     }
-
+    
     public func description(vs other: RockPaperScissors) -> String {
+        "\(self.text.capitalized) \(descriptionMiddle(vs: other))\(other.text)."
+    }
+
+    private func descriptionMiddle(vs other: RockPaperScissors) -> String {
         let match = "is the same as"
         switch self {
         case .rock:

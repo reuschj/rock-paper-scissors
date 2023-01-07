@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Gender: CustomStringConvertible, CaseIterable {
+enum Gender: CustomStringConvertible, CaseIterable, StringLocalizable {
     case male
     case female
     case other
@@ -20,6 +20,17 @@ enum Gender: CustomStringConvertible, CaseIterable {
             return "🚺 Female"
         case .other:
             return "⚧️ Other"
+        }
+    }
+    
+    var localizedDescription: String {
+        switch self {
+        case .male:
+            return "🚹 \(t.male)"
+        case .female:
+            return "🚺 \(t.female)"
+        case .other:
+            return "⚧️ \(t.other)"
         }
     }
 }

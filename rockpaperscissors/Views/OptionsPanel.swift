@@ -34,37 +34,47 @@ fileprivate struct OptionsPanelBase: View {
         set: { options.gender = $0 }
     )
     
+    private var computerPlayHeader: String {
+        let localized = t.computerPlayHeader(
+            getLocalizedComputerDescription(
+                withoutEmoji: true,
+                options: options
+            )
+        )
+        return "🎮 \(localized)"
+    }
+    
     var body: some View {
         Form {
             Section(
-                header: Text("🎮 How does \(getComputerDescription(withoutEmoji: true, options: options)) play?")
+                header: Text(computerPlayHeader)
             ) {
-                Picker("Play type 👉",
+                Picker("\(t.playType) 👉",
                        selection: computerPlayType,
                        content: {
                             ForEach(ComputerPlayTypeHolder.all) {
-                                Text($0.type.description).tag($0.type)
+                                Text($0.type.localizedDescription).tag($0.type)
                             }
                     
                 }).pickerStyle(DefaultPickerStyle())
             }
             // ---------- /
             Section(
-                header: Text("🧑 About you...")
+                header: Text("🧑 \(t.aboutYou)...")
             ) {
                 HStack {
-                    Text("🗣️ Your name?")
+                    Text("🗣️ \(t.yourName)")
                     TextField(
-                        "test",
+                        "nameField",
                         text: name,
-                        prompt: Text("How to call you?")
+                        prompt: Text(t.howToCallYou)
                     ).multilineTextAlignment(.trailing)
                 }
-                Picker("🚻 Your gender?",
+                Picker("🚻 \(t.yourGender)",
                        selection: gender,
                        content: {
                             ForEach(GenderHolder.all) {
-                                Text($0.gender?.description ?? "🚫 Unspecified").tag($0.gender)
+                                Text($0.gender?.localizedDescription ?? "🚫 \(t.unspecified)").tag($0.gender)
                             }
 
                 }).pickerStyle(DefaultPickerStyle())
@@ -77,7 +87,7 @@ struct OptionsPanel: View {
     var body: some View {
         #if os(iOS)
             OptionsPanelBase()
-                .navigationBarTitle(Text("🎛️ Options"))
+                .navigationBarTitle(Text("🎛️ \(t.options)"))
                 .navigationBarTitleDisplayMode(.large)
         #else
             OptionsPanelBase()

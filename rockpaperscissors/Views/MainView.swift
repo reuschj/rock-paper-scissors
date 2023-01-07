@@ -46,14 +46,14 @@ struct MainView: View {
         self.opponent = opponent
         let result: RPSResult = .from(choice, vs: opponent)
         self.result = result
-        self.resultStringSub = "\(choice.text.capitalized) \(choice.description(vs: opponent)) \(opponent.text)."
+        self.resultStringSub = choice.localizedDescription(vs: opponent)
         switch result {
         case .win:
-            self.resultStringHead = "You won! 🎉🥳🍾"
+            self.resultStringHead = "\(t.winMessage)! 🎉🥳🍾"
         case .tie:
-            self.resultStringHead = "Call it a draw \(shrugEmoji)"
+            self.resultStringHead = "\(t.tieMessage) \(shrugEmoji)"
         case .loss:
-            self.resultStringHead = "You lost! 😢😭"
+            self.resultStringHead = "\(t.lossMessage) 😢😭"
         }
     }
     
@@ -118,7 +118,7 @@ struct MainView: View {
     }
     
     private var headline: some View {
-        Text("Rock, Paper or Scissors?\n✊✋✌️")
+        Text("\(t.rockPaperOrScissors)?\n✊✋✌️")
             .font(.title)
             .multilineTextAlignment(.center)
         
@@ -136,7 +136,7 @@ struct MainView: View {
             .padding(.bottom, spacing * 2)
     }
     
-    private var youName: String { options.name ?? "You" }
+    private var youName: String { options.name ?? t.you }
     
     private var youEmoji: Character {
         switch options.gender {
@@ -202,7 +202,7 @@ struct MainView: View {
                                     )
                                     resultBlock(
                                         opponent,
-                                        label: getComputerDescription(options: options),
+                                        label: getLocalizedComputerDescription(options: options),
                                         size: resultSize,
                                         didWin: result == .loss,
                                         from: .trailing
@@ -212,7 +212,7 @@ struct MainView: View {
                                 .padding([.leading, .trailing], resultSpacing)
                                 
                                 Spacer()
-                                Button("🧹Clear") {
+                                Button("🧹\(t.clear)") {
                                     reset()
                                 }
                                 Spacer()
@@ -220,7 +220,7 @@ struct MainView: View {
                         } else if showInstructions {
                             VStack {
                                 Spacer()
-                                Text("👆\nPress a button above to play!\n😜")
+                                Text("👆\n\(t.noResultPlaceholder)\n😜")
                                     .font(.largeTitle)
                                     .foregroundColor(.gray)
                                     .multilineTextAlignment(.center)

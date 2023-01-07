@@ -12,7 +12,7 @@ private struct OptionsLink: View {
         NavigationLink(
             destination: OptionsPanel()
         ) {
-            Text("🎛️ Options")
+            Text("🎛️ \(t.options)")
         }
     }
 }
@@ -54,5 +54,12 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environment(\.locale, .init(identifier: "en"))
+        ContentView()
+            .environment(\.locale, .init(identifier: "es"))
+        ContentView()
+            .environment(\.locale, .init(identifier: "vi"))
+        ContentView()
+            .environment(\.locale, .init(identifier: "pt-BR"))
     }
 }
