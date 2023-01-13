@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import RockPaperScissorsAPI
+import RockPaperScissorsAppAPI
 
 struct RPSButton: View {
     var type: RockPaperScissors = .random
@@ -32,7 +34,7 @@ struct RPSButton: View {
 
 struct RPSButton_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach(RPSHolder.all) {
+        ForEach(RockPaperScissors.Wrapper.all) {
             RPSButton(
                 type: $0.type,
                 size: 128

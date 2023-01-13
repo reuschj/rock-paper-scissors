@@ -7,9 +7,11 @@
 
 import Foundation
 import Combine
+import RockPaperScissorsAPI
+import RockPaperScissorsAppAPI
 
 class Options: ObservableObject {
-    @Published var computerPlayType: ComputerPlayType = .random
+    @Published var computerPlayType: RockPaperScissors.ComputerPlayType = .random
     @Published var name: String?
     @Published var gender: Gender?
     

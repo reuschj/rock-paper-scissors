@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import RockPaperScissorsAPI
+import RockPaperScissorsAppAPI
 
 struct RPSTile: View {
     var type: RockPaperScissors = .random
@@ -69,7 +71,7 @@ struct RPSTile: View {
 
 struct RPSTile_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach(RPSHolder.all) {
+        ForEach(RockPaperScissors.Wrapper.all) {
             RPSTile(
                 type: $0.type,
                 size: 128,

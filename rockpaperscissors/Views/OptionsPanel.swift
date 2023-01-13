@@ -7,13 +7,15 @@
 
 import SwiftUI
 import Combine
+import RockPaperScissorsAPI
+import RockPaperScissorsAppAPI
 
 fileprivate var options: Options = .shared
 
 fileprivate struct OptionsPanelBase: View {
     @ObservedObject var _options: Options = options
 
-    private var computerPlayType = Binding<ComputerPlayType>(
+    private var computerPlayType = Binding<RockPaperScissors.ComputerPlayType>(
         get: { options.computerPlayType },
         set: { options.computerPlayType = $0 }
     )
@@ -52,7 +54,7 @@ fileprivate struct OptionsPanelBase: View {
                 Picker("\(t.playType) 👉",
                        selection: computerPlayType,
                        content: {
-                            ForEach(ComputerPlayTypeHolder.all) {
+                    ForEach(RockPaperScissors.ComputerPlayType.Wrapper.all) {
                                 Text($0.type.localizedDescription).tag($0.type)
                             }
                     
@@ -73,7 +75,7 @@ fileprivate struct OptionsPanelBase: View {
                 Picker("🚻 \(t.yourGender)",
                        selection: gender,
                        content: {
-                            ForEach(GenderHolder.all) {
+                            ForEach(Gender.Wrapper.all) {
                                 Text($0.gender?.localizedDescription ?? "🚫 \(t.unspecified)").tag($0.gender)
                             }
 

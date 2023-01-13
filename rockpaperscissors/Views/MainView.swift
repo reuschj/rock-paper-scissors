@@ -7,11 +7,13 @@
 
 import SwiftUI
 import Combine
+import RockPaperScissorsAPI
+import RockPaperScissorsAppAPI
 
 struct MainView: View {
     @State var choice: RockPaperScissors? = nil
     @State var opponent: RockPaperScissors? = nil
-    @State var result: RPSResult? = nil
+    @State var result: RockPaperScissors.GameResult? = nil
     @State var resultStringHead: String? = nil
     @State var resultStringSub: String? = nil
     @State var showInstructions: Bool = true
@@ -44,7 +46,7 @@ struct MainView: View {
             type: options.computerPlayType
         )
         self.opponent = opponent
-        let result: RPSResult = .from(choice, vs: opponent)
+        let result: RockPaperScissors.GameResult = .from(choice, vs: opponent)
         self.result = result
         self.resultStringSub = choice.localizedDescription(vs: opponent)
         switch result {

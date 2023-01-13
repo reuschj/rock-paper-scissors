@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "rock-paper-scissors-api",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/reuschj/rock-paper-scissors-api",
+      "state" : {
+        "branch" : "main",
+        "revision" : "354d0d58df123476694d209611611c9281c02f95"
+      }
+    }
+  ],
+  "version" : 2
+}

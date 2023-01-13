@@ -54,3 +54,4 @@ func getLocalizedComputerDescription(withoutEmoji: Bool = false, options: Option
         return String(format: template, device)
     }
 }
+

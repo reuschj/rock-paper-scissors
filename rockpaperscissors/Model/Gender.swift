@@ -6,12 +6,18 @@
 //
 
 import Foundation
+import RockPaperScissorsAppAPI
 
-enum Gender: CustomStringConvertible, CaseIterable, StringLocalizable {
+enum Gender: CaseIterable {
+    /// Identifying as male
     case male
+    /// Identifying as female
     case female
+    /// Identifying as anything else than the above
     case other
-    
+}
+
+extension Gender: CustomStringConvertible {
     var description: String {
         switch self {
         case .male:
@@ -22,7 +28,9 @@ enum Gender: CustomStringConvertible, CaseIterable, StringLocalizable {
             return "⚧️ Other"
         }
     }
-    
+}
+
+extension Gender: CustomLocalizedStringConvertible {
     var localizedDescription: String {
         switch self {
         case .male:
@@ -35,18 +43,23 @@ enum Gender: CustomStringConvertible, CaseIterable, StringLocalizable {
     }
 }
 
-struct GenderHolder: Identifiable, Hashable {
-    let id: UUID = .init()
-    let gender: Gender?
-    
-    init(_ gender: Gender? = nil) {
-        self.gender = gender
+extension Gender {
+    // 🎁 Wrapper -------------------------------- /
+
+    /// A box wrapping a gender value with a unique ID.
+    public struct Wrapper: Identifiable, Hashable {
+        public let gender: Gender?
+        public let id: UUID = .init()
+        
+        public init(around gender: Gender? = nil) {
+            self.gender = gender
+        }
+        
+        public static let all: [Wrapper] = [
+            .init(),
+            .init(around: .male),
+            .init(around: .female),
+            .init(around: .other)
+        ]
     }
-    
-    static let all: [GenderHolder] = [
-        .init(),
-        .init(.male),
-        .init(.female),
-        .init(.other)
-    ]
 }
