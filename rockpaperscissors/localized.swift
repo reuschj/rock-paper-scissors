@@ -7,10 +7,6 @@
 
 import Foundation
 
-//fileprivate func from(key: String) -> String {
-//    String(localized: "noResultPlaceholder")
-//}
-
 fileprivate func from(key: String, comment: String? = nil) -> String {
     return NSLocalizedString(key, comment: comment ?? "")
 }
@@ -29,8 +25,8 @@ let t = (
     you: "you"~,
     clear: "clear"~,
     options: "options"~,
-    computerPlayHeader: {
-        String(format: "computerPlayHeader"~, $0)
+    computerPlayHeader: { (computerDescription: String) -> String in
+        String(format: "computerPlayHeader"~, computerDescription)
     },
     playType: "playType"~,
     aboutYou: "aboutYou"~,

@@ -11,6 +11,7 @@ import RockPaperScissorsAPI
 import RockPaperScissorsAppAPI
 
 struct MainView: View {
+    // 🎚️ State ------------------------------------------ /
     @State var choice: RockPaperScissors? = nil
     @State var opponent: RockPaperScissors? = nil
     @State var result: RockPaperScissors.GameResult? = nil
@@ -22,20 +23,54 @@ struct MainView: View {
     
     @ObservedObject var options: Options = .shared
     
-    private let base: CGFloat = 8
-    private let maxSize: CGFloat = 560
-
+    // 📏 Sizes ------------------------------------- /
+    
+    private let sizes: AppSizes = .standard
+    
+    private var base: CGFloat { sizes.base }
+    private var maxSize: CGFloat { sizes.max }
+    
+    // 🛠️ Utility ----------------------------------- /
+    
     private func getSize(
         from geo: GeometryProxy,
-        items: Int = 3
+        splitBy items: Int = 3
     ) -> (CGFloat, CGFloat, CGFloat) {
-        let fullSize = min(maxSize, geo.size.width)
+        let fullSize = sizes.cap(within: geo.size.width)
         let gaps = CGFloat(items - 1)
-        let spacing = base * 2
+        let spacing = sizes.base(2)
         let allSpacing = spacing * gaps
         let size = (fullSize - allSpacing) / CGFloat(items)
         return (size, fullSize, spacing)
     }
+    
+    private var youName: String { options.name ?? t.you }
+    
+    private var youEmoji: Character {
+        switch options.gender {
+        case .male:
+            return "🧍‍♂️"
+        case .female:
+            return "🧍‍♀️"
+        default:
+            return "🧍"
+        }
+    }
+    
+    private var youLabel: String { "\(youName)\(youEmoji)" }
+    
+    private var shrugEmoji: Character {
+        switch options.gender {
+        case .male:
+            return "🤷‍♂️"
+        case .female:
+            return "🤷‍♀️"
+        default:
+            return "🤷"
+        }
+    }
+    
+   // 🏃 Actions ----------------------------------- /
     
     private func makeChoice(_ choice: RockPaperScissors) {
         self.id = .init()
@@ -78,7 +113,44 @@ struct MainView: View {
         }
     }
     
-    private func button(_ type: RockPaperScissors, size: CGFloat) -> some View {
+    // 🖼️ Views ----------------------------------- /
+    
+    // Header area -- /
+    
+    private func ChoiceHeader(
+        within geo: GeometryProxy
+    ) -> some View {
+        VStack {
+            Headline
+            ButtonRack(within: geo)
+        }
+    }
+
+    private var Headline: some View {
+        Text("\(t.rockPaperOrScissors)?\n✊✋✌️")
+            .font(.title)
+            .multilineTextAlignment(.center)
+        
+    }
+    
+    private func ButtonRack(
+        within geo: GeometryProxy
+    ) -> some View {
+        let (size, totalSize, spacing) = getSize(from: geo, splitBy: 3)
+        return HStack(alignment: .center, spacing: spacing) {
+            ChoiceButton(.rock, size: size)
+            ChoiceButton(.paper, size: size)
+            ChoiceButton(.scissors, size: size)
+        }
+        .frame(width: totalSize, alignment: .center)
+        .padding([.leading, .trailing], spacing)
+        .padding(.bottom, spacing * 2)
+    }
+    
+    private func ChoiceButton(
+        _ type: RockPaperScissors,
+        size: CGFloat
+    ) -> some View {
         VStack {
             RPSButton(
                 type: type,
@@ -93,146 +165,112 @@ struct MainView: View {
         .animation(.default, value: animating)
     }
     
-    private func tile(_ type: RockPaperScissors, size: CGFloat, didWin: Bool) -> some View {
-        RPSTile(
-            type: type,
-            size: size,
-            color: didWin ? (result == .win ? .green : .red) : nil,
-            animateDuration: .seconds(0.5)
-        )
-        .padding(.bottom, base)
-    }
+    // Results area -- /
     
-    private func resultBlock(_ type: RockPaperScissors, label: String, size: CGFloat, didWin: Bool, from edge: Edge = .leading) -> some View {
+    private func ResultsArea(
+        within geo: GeometryProxy
+    ) -> some View {
         VStack {
-            tile(
-                type,
-                size: size,
-                didWin: didWin
-            )
-                .id(id)
-                .transition(.push(from: edge))
-                .animation(.easeInOut(duration: 0.45), value: id)
-            Text(label)
-                .font(.headline)
+            if !showInstructions, let choice = choice, let opponent = opponent {
+                Results(choice, vs: opponent, within: geo)
+            } else if showInstructions {
+                NoResultPlaceholder
+            }
+        }
+        .id(showInstructions)
+        .transition(.move(edge: .bottom))
+        .animation(.easeInOut, value: showInstructions)
+    }
+    
+    private func Results(
+        _ choice: RockPaperScissors,
+        vs opponent: RockPaperScissors,
+        within geo: GeometryProxy
+    ) -> some View {
+        VStack {
+            Spacer()
+            ResultsHeader
+            ResultsBody(choice, vs: opponent, within: geo)
+            Spacer()
+            ClearButton
+            Spacer()
+        }
+    }
+    
+    private var NoResultPlaceholder: some View {
+        VStack {
+            Spacer()
+            Text("👆\n\(t.noResultPlaceholder)\n😜")
+                .font(.largeTitle)
+                .foregroundColor(.gray)
                 .multilineTextAlignment(.center)
+            Spacer()
         }
     }
     
-    private var headline: some View {
-        Text("\(t.rockPaperOrScissors)?\n✊✋✌️")
-            .font(.title)
-            .multilineTextAlignment(.center)
-        
-    }
-    
-    private func buttonRack(within geo: GeometryProxy) -> some View {
-        let (size, totalSize, spacing) = getSize(from: geo, items: 3)
-        return HStack(alignment: .center, spacing: spacing) {
-            button(.rock, size: size)
-            button(.paper, size: size)
-            button(.scissors, size: size)
+    private var ResultsHeader: some View {
+        VStack {
+            if let head = resultStringHead {
+                Text(head)
+                    .font(.largeTitle)
+                    .foregroundColor(result == .loss ? .red : .primary)
+            }
+            if let sub = resultStringSub {
+                Text(sub)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
         }
-            .frame(width: totalSize, alignment: .center)
-            .padding([.leading, .trailing], spacing)
-            .padding(.bottom, spacing * 2)
+        .padding(.bottom)
+        .id(animating)
+        .opacity(animating ? 0 : 1)
+        .animation(.easeInOut, value: animating)
     }
     
-    private var youName: String { options.name ?? t.you }
+    private func ResultsBody(
+        _ choice: RockPaperScissors,
+        vs opponent: RockPaperScissors,
+        within geo: GeometryProxy
+    ) -> some View {
+        let (blockSize, width, sidePad) = getSize(from: geo, splitBy: 2)
+        return HStack(alignment: .center, spacing: sidePad) {
+            ResultBlock(
+                id: id,
+                type: choice,
+                result: result,
+                label: youLabel,
+                size: blockSize,
+                isWinner: result == .win,
+                fromEdge: .top
+            )
+            ResultBlock(
+                id: id,
+                type: opponent,
+                result: result,
+                label: getLocalizedComputerDescription(options: options),
+                size: blockSize,
+                isWinner: result == .loss,
+                fromEdge: .trailing
+            )
+        }
+        .frame(width: width, alignment: .center)
+        .padding([.leading, .trailing], sidePad)
+    }
     
-    private var youEmoji: Character {
-        switch options.gender {
-        case .male:
-            return "🧍‍♂️"
-        case .female:
-            return "🧍‍♀️"
-        default:
-            return "🧍"
+    private var ClearButton: some View {
+        Button("🧹\(t.clear)") {
+            reset()
         }
     }
     
-    private var youLabel: String { "\(youName)\(youEmoji)" }
-    
-    private var shrugEmoji: Character {
-        switch options.gender {
-        case .male:
-            return "🤷‍♂️"
-        case .female:
-            return "🤷‍♀️"
-        default:
-            return "🤷"
-        }
-    }
+    // 💪 Body ----------------------------------- /
     
     var body: some View {
         VStack {
             GeometryReader { geo in
                 VStack(alignment: .center) {
-                    VStack {
-                        headline
-                        buttonRack(within: geo)
-                    }
-                    VStack {
-                        if !showInstructions, let choice = choice, let opponent = opponent {
-                            let (resultSize, totalResultSize, resultSpacing) = getSize(from: geo, items: 2)
-                            VStack {
-                                Spacer()
-                                VStack {
-                                    if let head = resultStringHead {
-                                        Text(head)
-                                            .font(.largeTitle)
-                                            .foregroundColor(result == .loss ? .red : .primary)
-                                    }
-                                    if let sub = resultStringSub {
-                                        Text(sub)
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                    }
-                                }
-                                .padding(.bottom)
-                                .id(animating)
-                                .opacity(animating ? 0 : 1)
-                                .animation(.easeInOut, value: animating)
-                                
-                                HStack(alignment: .center, spacing: resultSpacing) {
-                                    resultBlock(
-                                        choice,
-                                        label: youLabel,
-                                        size: resultSize,
-                                        didWin: result == .win,
-                                        from: .top
-                                    )
-                                    resultBlock(
-                                        opponent,
-                                        label: getLocalizedComputerDescription(options: options),
-                                        size: resultSize,
-                                        didWin: result == .loss,
-                                        from: .trailing
-                                    )
-                                }
-                                .frame(width: totalResultSize, alignment: .center)
-                                .padding([.leading, .trailing], resultSpacing)
-                                
-                                Spacer()
-                                Button("🧹\(t.clear)") {
-                                    reset()
-                                }
-                                Spacer()
-                            }
-                        } else if showInstructions {
-                            VStack {
-                                Spacer()
-                                Text("👆\n\(t.noResultPlaceholder)\n😜")
-                                    .font(.largeTitle)
-                                    .foregroundColor(.gray)
-                                    .multilineTextAlignment(.center)
-                                Spacer()
-                            }
-                        }
-                    }
-                    .id(showInstructions)
-                    .transition(.move(edge: .bottom))
-                    .animation(.easeInOut, value: showInstructions)
+                    ChoiceHeader(within: geo)
+                    ResultsArea(within: geo)
                 }
                 .frame(width: geo.size.width)
             }
