@@ -20,8 +20,9 @@ struct MainView: View {
     @State var showInstructions: Bool = true
     @State var animating: Bool = false
     @State private var id: UUID = .init()
-    
-    @ObservedObject var options: Options = .shared
+
+    @EnvironmentObject var store: Store
+    private var options: Options { store.options }
     
     // 📏 Sizes ------------------------------------- /
     
@@ -282,5 +283,6 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
+            .environmentObject(Store())
     }
 }

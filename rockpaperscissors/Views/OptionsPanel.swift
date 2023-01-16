@@ -10,31 +10,24 @@ import Combine
 import RockPaperScissorsAPI
 import RockPaperScissorsAppAPI
 
-fileprivate var options: Options = .shared
-
 fileprivate struct OptionsPanelBase: View {
-    @ObservedObject var _options: Options = options
-
-    private var computerPlayType = Binding<RockPaperScissors.ComputerPlayType>(
-        get: { options.computerPlayType },
-        set: { options.computerPlayType = $0 }
-    )
+    @EnvironmentObject var store: Store
+    private var options: Options { store.options }
     
-    private var name = Binding<String>(
-        get: { options.name ?? "" },
-        set: {
-            guard $0.count > 0 else {
-                options.name = nil
-                return
+    private var name: Binding<String> {
+        Binding(
+            get: {
+                options.name ?? ""
+            },
+            set: {
+                guard $0.count > 0 else {
+                    options.name = nil
+                    return
+                }
+                options.name = $0
             }
-            options.name = $0.trimEnd()
-        }
-    )
-    
-    private var gender = Binding<Gender?>(
-        get: { options.gender },
-        set: { options.gender = $0 }
-    )
+        )
+    }
     
     private var computerPlayHeader: String {
         let localized = t.computerPlayHeader(
@@ -52,7 +45,7 @@ fileprivate struct OptionsPanelBase: View {
                 header: Text(computerPlayHeader)
             ) {
                 Picker("\(t.playType) 👉",
-                       selection: computerPlayType,
+                       selection: $store.options.computerPlayType,
                        content: {
                     ForEach(RockPaperScissors.ComputerPlayType.Wrapper.all) {
                                 Text($0.type.localizedDescription).tag($0.type)
@@ -73,7 +66,7 @@ fileprivate struct OptionsPanelBase: View {
                     ).multilineTextAlignment(.trailing)
                 }
                 Picker("🚻 \(t.yourGender)",
-                       selection: gender,
+                       selection: $store.options.gender,
                        content: {
                             ForEach(Gender.Wrapper.all) {
                                 Text($0.gender?.localizedDescription ?? "🚫 \(t.unspecified)").tag($0.gender)
@@ -101,6 +94,7 @@ struct OptionsPanel_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             OptionsPanel()
+                .environmentObject(Store())
         }
     }
 }

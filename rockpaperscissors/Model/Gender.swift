@@ -8,7 +8,7 @@
 import Foundation
 import RockPaperScissorsAppAPI
 
-enum Gender: CaseIterable {
+enum Gender: String, RawRepresentable, CaseIterable {
     /// Identifying as male
     case male
     /// Identifying as female

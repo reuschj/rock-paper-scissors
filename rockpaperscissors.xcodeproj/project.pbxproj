@@ -17,6 +17,7 @@
 		A45EE260295D70C300399B6E /* RPSTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45EE25F295D70C300399B6E /* RPSTile.swift */; };
 		A45EE267295EAE7900399B6E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45EE266295EAE7900399B6E /* MainView.swift */; };
 		A45EE269295EB25400399B6E /* RPSButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45EE268295EB25400399B6E /* RPSButton.swift */; };
+		A46226882985A0EF00C6FC5A /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46226872985A0EF00C6FC5A /* Store.swift */; };
 		A4BA40B2296001F700912E41 /* OptionsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BA40B1296001F700912E41 /* OptionsPanel.swift */; };
 		A4BA40B52960088100912E41 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BA40B42960088100912E41 /* Options.swift */; };
 		A4BA40B8296153A800912E41 /* getComputerDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BA40B7296153A800912E41 /* getComputerDescription.swift */; };
@@ -27,6 +28,7 @@
 		A4E9FDE329729352007CA8DD /* RockPaperScissorsAppAPI in Frameworks */ = {isa = PBXBuildFile; productRef = A4E9FDE229729352007CA8DD /* RockPaperScissorsAppAPI */; };
 		A4E9FDE52973D609007CA8DD /* ResultBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E9FDE42973D608007CA8DD /* ResultBlock.swift */; };
 		A4E9FDE72973D850007CA8DD /* AppSizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E9FDE62973D850007CA8DD /* AppSizes.swift */; };
+		A4E9FDE929751E83007CA8DD /* DefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E9FDE829751E82007CA8DD /* DefaultKeys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,7 @@
 		A45EE25F295D70C300399B6E /* RPSTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPSTile.swift; sourceTree = "<group>"; };
 		A45EE266295EAE7900399B6E /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		A45EE268295EB25400399B6E /* RPSButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPSButton.swift; sourceTree = "<group>"; };
+		A46226872985A0EF00C6FC5A /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		A4BA40B1296001F700912E41 /* OptionsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsPanel.swift; sourceTree = "<group>"; };
 		A4BA40B42960088100912E41 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		A4BA40B7296153A800912E41 /* getComputerDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getComputerDescription.swift; sourceTree = "<group>"; };
@@ -72,6 +75,7 @@
 		A4C367392969526500E01A6B /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A4E9FDE42973D608007CA8DD /* ResultBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultBlock.swift; sourceTree = "<group>"; };
 		A4E9FDE62973D850007CA8DD /* AppSizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSizes.swift; sourceTree = "<group>"; };
+		A4E9FDE829751E82007CA8DD /* DefaultKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultKeys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +134,7 @@
 				A4BA40B32960086800912E41 /* Model */,
 				A4BA40B62961537600912E41 /* Util */,
 				A4C3673229694F1200E01A6B /* Localized.swift */,
+				A4E9FDE829751E82007CA8DD /* DefaultKeys.swift */,
 				A4C367362969522900E01A6B /* Localizable.strings */,
 				A45EE230295D6CFC00399B6E /* Assets.xcassets */,
 				A45EE232295D6CFC00399B6E /* rockpaperscissors.entitlements */,
@@ -181,6 +186,7 @@
 				A4E9FDE62973D850007CA8DD /* AppSizes.swift */,
 				A4BA40B42960088100912E41 /* Options.swift */,
 				A4C2A9B52967F76A00D1476C /* Gender.swift */,
+				A46226872985A0EF00C6FC5A /* Store.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -341,8 +347,10 @@
 				A45EE269295EB25400399B6E /* RPSButton.swift in Sources */,
 				A4BA40B8296153A800912E41 /* getComputerDescription.swift in Sources */,
 				A4C3673329694F1200E01A6B /* Localized.swift in Sources */,
+				A46226882985A0EF00C6FC5A /* Store.swift in Sources */,
 				A4BA40B52960088100912E41 /* Options.swift in Sources */,
 				A4E9FDE72973D850007CA8DD /* AppSizes.swift in Sources */,
+				A4E9FDE929751E83007CA8DD /* DefaultKeys.swift in Sources */,
 				A4C2A9B62967F76A00D1476C /* Gender.swift in Sources */,
 				A4BA40B2296001F700912E41 /* OptionsPanel.swift in Sources */,
 				A45EE260295D70C300399B6E /* RPSTile.swift in Sources */,

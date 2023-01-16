@@ -42,11 +42,15 @@ struct MacMainView: View {
 
 
 struct ContentView: View {
+    @StateObject var store: Store = .init()
+
     var body: some View {
         #if os(iOS)
             IOSMainView()
+                .environmentObject(store)
         #else
             MacMainView()
+                .environmentObject(store)
         #endif
     }
 }
@@ -55,11 +59,15 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .environment(\.locale, .init(identifier: "en"))
+            .environmentObject(Store())
         ContentView()
             .environment(\.locale, .init(identifier: "es"))
+            .environmentObject(Store())
         ContentView()
             .environment(\.locale, .init(identifier: "vi"))
+            .environmentObject(Store())
         ContentView()
             .environment(\.locale, .init(identifier: "pt-BR"))
+            .environmentObject(Store())
     }
 }
