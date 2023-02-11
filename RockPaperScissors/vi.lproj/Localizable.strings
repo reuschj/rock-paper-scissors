@@ -1,0 +1,52 @@
+/* 
+  Localizable.strings
+  rockpaperscissors
+
+  Created by Justin Reusch on 1/7/23.
+  
+*/
+
+"noResultPlaceholder" = "Nhấn một nút ở trên để chơi!";
+"winMessage" = "Bạn đã thắng!";
+"tieMessage" = "Chúng tôi gắn";
+"lossMessage" = "Bạn đã thua!";
+"rockPaperOrScissors" = "Đá, Giấy hoặc Kéo?";
+"you" = "Bạn";
+"clear" = "Dọn dẹp";
+
+"options" = "Tùy chọn";
+"computerPlayHeader" = "%@ chơi như thế nào?";
+"playType" = "Loại trò chơi";
+"aboutYou" = "Về bạn...";
+"yourName" = "Your name?";
+"howToCallYou" = "Tên của bạn?";
+"yourGender" = "Giới tính của bạn?";
+"unspecified" = "Không xác định";
+"male" = "Nam giới";
+"female" = "Giống cái";
+"other" = "Khác";
+"computer" = "máy tính";
+"yourX" = "%@ của bạn";
+"someonesX" = "_%@ của %@";
+
+// RPS lib
+"rps_win" = "Thắng";
+"rps_tie" = "Hòa";
+"rps_loss" = "Thua";
+//
+"rps_cpt_random" = "Bình thường (ngẫu nhiên)";
+"rps_cpt_cawins" = "Máy tính luôn thắng (nó gian lận)";
+"rps_cpt_caloses" = "Máy tính luôn thua (bạn gian lận)";
+"rps_cpt_camatches" = "Máy tính luôn khớp (có tiếng vang không?)";
+//
+"rps_rock" = "đá";
+"rps_paper" = "giấy";
+"rps_scissors" = "kéo";
+//
+"rps_vs_match" = "%@ cũng giống như %@";
+"rps_vs_rock_paper" = "%@ được bao phủ bởi %@";
+"rps_vs_rock_scissors" = "%@ đập %@";
+"rps_vs_paper_rock" = "%@ bao phủ %@";
+"rps_vs_paper_scissors" = "%@ bị cắt bởi %@";
+"rps_vs_scissors_rock" = "%@ bị đập vỡ bởi %@";
+"rps_vs_scissors_paper" = "%@ cắt %@";
